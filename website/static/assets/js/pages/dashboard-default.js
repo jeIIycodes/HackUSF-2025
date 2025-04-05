@@ -1,10 +1,11 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Helper function to create a Chart.js line chart with threshold-based styling and hatching.
+  // Helper function to create a Chart.js line chart with delayed animations and conditional red filling.
   function createChart(canvasId, data, threshold) {
     const ctx = document.getElementById(canvasId).getContext('2d');
-    const labels = data.map((_, index) => index + 1); // Generate day labels
+    // Generate day labels from the data length
+    const labels = data.map((_, index) => index + 1);
 
     const config = {
       type: 'line',
@@ -14,10 +15,18 @@ document.addEventListener('DOMContentLoaded', function() {
           {
             label: 'Radius (mm)',
             data: data,
-            borderColor: 'rgba(75, 192, 192, 1)',
+            borderColor: 'rgba(75, 192, 192, 1)', // Blue line
             fill: false,
             tension: 0.1,
-            // Use scriptable options for point radius and color:
+            // Animate blue line first.
+            animations: {
+              y: {
+                duration: 2000,
+                easing: 'easeInOutElastic',
+                delay: 0
+              }
+            },
+            // Use scriptable options to adjust point styling:
             pointRadius: function(context) {
               const value = context.raw;
               return (value > threshold) ? 8 : 3;
@@ -30,11 +39,19 @@ document.addEventListener('DOMContentLoaded', function() {
           {
             label: 'Threshold',
             data: Array(data.length).fill(threshold),
-            borderColor: 'rgba(255, 99, 132, 1)',
+            borderColor: 'rgba(255, 99, 132, 1)', // Red dashed line
             borderDash: [5, 5],
             fill: false,
             pointRadius: 0,
-            tension: 0.1
+            tension: 0.1,
+            // Animate red dashed line with a delay.
+            animations: {
+              y: {
+                duration: 2000,
+                easing: 'easeInOutElastic',
+                delay: 2000
+              }
+            }
           }
         ]
       },
@@ -54,38 +71,71 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
       },
-      plugins: [] // Custom plugin(s) will be added below.
+      plugins: []
     };
 
-    // Custom plugin: Draw a hatched pattern in the area above the threshold line.
+    // Custom plugin: Fill with red the area where the blue line is above the threshold.
     config.plugins.push({
-      id: 'hatchedThreshold',
+      id: 'fillRedPlugin',
       afterDatasetsDraw: function(chart) {
         const ctx = chart.ctx;
         const chartArea = chart.chartArea;
         const yScale = chart.scales.y;
+        // Get the pixel coordinate for the threshold value.
         const thresholdY = yScale.getPixelForValue(threshold);
-        // Ensure the threshold line lies within the chart area.
-        if (thresholdY > chartArea.top && thresholdY < chartArea.bottom) {
-          // Create an offscreen canvas to define a diagonal hatch pattern.
-          const patternCanvas = document.createElement('canvas');
-          patternCanvas.width = 10;
-          patternCanvas.height = 10;
-          const pctx = patternCanvas.getContext('2d');
-          pctx.strokeStyle = 'rgba(200,200,200,0.5)';
-          pctx.lineWidth = 1;
-          pctx.beginPath();
-          pctx.moveTo(0, 10);
-          pctx.lineTo(10, 0);
-          pctx.stroke();
-          const pattern = ctx.createPattern(patternCanvas, 'repeat');
 
-          ctx.save();
-          ctx.fillStyle = pattern;
-          // Fill the area above the threshold line.
-          ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, thresholdY - chartArea.top);
-          ctx.restore();
+        // Get the blue line meta data.
+        const blueMeta = chart.getDatasetMeta(0);
+        if (!blueMeta || !blueMeta.data) return;
+
+        ctx.save();
+        // Set a semi-transparent red fill.
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+
+        // Iterate through each consecutive pair of points on the blue line.
+        for (let i = 0; i < blueMeta.data.length - 1; i++) {
+          const p0 = blueMeta.data[i];
+          const p1 = blueMeta.data[i+1];
+          const x0 = p0.x, y0 = p0.y;
+          const x1 = p1.x, y1 = p1.y;
+
+          // Determine if each point is above the threshold.
+          const p0Above = y0 < thresholdY;
+          const p1Above = y1 < thresholdY;
+
+          if (p0Above && p1Above) {
+            // Both points are above the threshold.
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
+            ctx.lineTo(x1, thresholdY);
+            ctx.lineTo(x0, thresholdY);
+            ctx.closePath();
+            ctx.fill();
+          } else if (p0Above && !p1Above) {
+            // p0 is above, p1 is below the threshold: compute intersection.
+            const t = (thresholdY - y0) / (y1 - y0);
+            const xi = x0 + t * (x1 - x0);
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(xi, thresholdY);
+            ctx.lineTo(x0, thresholdY);
+            ctx.closePath();
+            ctx.fill();
+          } else if (!p0Above && p1Above) {
+            // p0 is below, p1 is above: compute intersection.
+            const t = (thresholdY - y0) / (y1 - y0);
+            const xi = x0 + t * (x1 - x0);
+            ctx.beginPath();
+            ctx.moveTo(xi, thresholdY);
+            ctx.lineTo(x1, y1);
+            ctx.lineTo(x1, thresholdY);
+            ctx.closePath();
+            ctx.fill();
+          }
+          // If both points are below the threshold, no fill is needed.
         }
+        ctx.restore();
       }
     });
 
@@ -95,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Example dummy data arrays and thresholds for demonstration.
   const leftElbowData = [5, 6, 7, 8, 7, 6, 5];
   const leftThighData = [6, 7, 6.5, 7.2, 7.5, 7.3, 7];
-  const rightShoulderData = [4, 4.5, 5,4.8, 4.5, 5.5, 5 ];
+  const rightShoulderData = [4, 4.5, 5, 4.8, 4.5, 5.5, 5];
 
   const leftElbowThreshold = 7;
   const leftThighThreshold = 7.3;
