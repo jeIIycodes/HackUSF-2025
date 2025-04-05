@@ -1,0 +1,22 @@
+{% extends "layouts/minimal.html" %}
+
+{% block content %}
+  <div class="form-container">
+    <h2 class="text-center mb-4">Demographic Assessment</h2>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      {% for field in form %}
+        {% if field.name != 'csrf_token' and field.type != 'SubmitField' %}
+        <div class="form-question mb-4 p-3">
+          <label class="form-label">{{ field.label }}</label>
+          {{ field(class="form-control") }}
+        </div>        
+        {% endif %}
+      {% endfor %}
+
+      <div class="text-center mt-4">
+        {{ form.submit(class="btn btn-primary px-4 py-2") }}
+      </div>
+    </form>
+  </div>
+{% endblock %}
