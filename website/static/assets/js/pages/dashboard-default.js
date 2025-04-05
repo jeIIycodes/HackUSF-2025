@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Animate blue line first.
             animations: {
               y: {
-                duration: 2000,
+                duration: 1500,
                 easing: 'easeInOutElastic',
                 delay: 0
               }
@@ -47,9 +47,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Animate red dashed line with a delay.
             animations: {
               y: {
-                duration: 2000,
+                duration: 1500,
                 easing: 'easeInOutElastic',
-                delay: 2000
+                delay: 1500
               }
             }
           }
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
           x: {
             title: {
               display: true,
-              text: 'Days'
+              text: 'Weeks'
             }
           },
           y: {
@@ -143,9 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Example dummy data arrays and thresholds for demonstration.
-  const leftElbowData = [5, 6, 7, 8, 7, 6, 5];
-  const leftThighData = [6, 7, 6.5, 7.2, 7.5, 7.3, 7];
-  const rightShoulderData = [4, 4.5, 5, 4.8, 4.5, 5.5, 5];
+  const leftElbowData = [5, 5.1, 5.3, 5.9, 6.8, 7.1, 7.5];
+  const leftThighData = [6, 6.3, 6.7, 7.1, 7.5, 7.3, 7];
+  const rightShoulderData = [4, 4.3, 4.8, 4.7, 4.5, 4.6, 4.0];
 
   const leftElbowThreshold = 7;
   const leftThighThreshold = 7.3;

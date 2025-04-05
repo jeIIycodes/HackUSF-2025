@@ -70,12 +70,186 @@
         </div>
       </div>
 
-      <!-- Bottom Row: One long blank widget -->
+      <!-- Bottom Row: Table with Weekly Data -->
       <div class="row">
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <!-- Blank widget - add your content here -->
+              <h5 class="mb-3">Weekly SkinScan Data</h5>
+              <div class="table-responsive">
+                <table id="example" class="table table-hover" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th>Timestamps</th>
+                      <th>Location</th>
+                      <th>Diameter (mm)</th>
+                      <th>Area (mm²)</th>
+                      <th>Detected Risk</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {# Left Elbow Data (Threshold: 7) #}
+                    <tr>
+                      <td>2023-04-10</td>
+                      <td>Left Elbow</td>
+                      <td>10.00</td>
+                      <td>78.54</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-11</td>
+                      <td>Left Elbow</td>
+                      <td>10.20</td>
+                      <td>81.68</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-12</td>
+                      <td>Left Elbow</td>
+                      <td>10.60</td>
+                      <td>88.26</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-13</td>
+                      <td>Left Elbow</td>
+                      <td>11.80</td>
+                      <td>109.40</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-14</td>
+                      <td>Left Elbow</td>
+                      <td>13.60</td>
+                      <td>145.44</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-15</td>
+                      <td>Left Elbow</td>
+                      <td>14.20</td>
+                      <td>158.56</td>
+                      <td>High</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-16</td>
+                      <td>Left Elbow</td>
+                      <td>15.00</td>
+                      <td>176.71</td>
+                      <td>High</td>
+                    </tr>
+                    {# Left Thigh Data (Threshold: 7.3) #}
+                    <tr>
+                      <td>2023-04-10</td>
+                      <td>Left Thigh</td>
+                      <td>12.00</td>
+                      <td>113.10</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-11</td>
+                      <td>Left Thigh</td>
+                      <td>12.60</td>
+                      <td>124.72</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-12</td>
+                      <td>Left Thigh</td>
+                      <td>13.40</td>
+                      <td>141.16</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-13</td>
+                      <td>Left Thigh</td>
+                      <td>14.20</td>
+                      <td>158.56</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-14</td>
+                      <td>Left Thigh</td>
+                      <td>15.00</td>
+                      <td>176.71</td>
+                      <td>High</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-15</td>
+                      <td>Left Thigh</td>
+                      <td>14.60</td>
+                      <td>167.55</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-16</td>
+                      <td>Left Thigh</td>
+                      <td>14.00</td>
+                      <td>153.94</td>
+                      <td>Normal</td>
+                    </tr>
+                    {# Right Shoulder Data (Threshold: 5) #}
+                    <tr>
+                      <td>2023-04-10</td>
+                      <td>Right Shoulder</td>
+                      <td>8.00</td>
+                      <td>50.27</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-11</td>
+                      <td>Right Shoulder</td>
+                      <td>8.60</td>
+                      <td>58.15</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-12</td>
+                      <td>Right Shoulder</td>
+                      <td>9.60</td>
+                      <td>72.38</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-13</td>
+                      <td>Right Shoulder</td>
+                      <td>9.40</td>
+                      <td>69.36</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-14</td>
+                      <td>Right Shoulder</td>
+                      <td>9.00</td>
+                      <td>63.62</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-15</td>
+                      <td>Right Shoulder</td>
+                      <td>9.20</td>
+                      <td>66.52</td>
+                      <td>Normal</td>
+                    </tr>
+                    <tr>
+                      <td>2023-04-16</td>
+                      <td>Right Shoulder</td>
+                      <td>8.00</td>
+                      <td>50.27</td>
+                      <td>Normal</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th>Timestamps</th>
+                      <th>Location</th>
+                      <th>Diameter (mm)</th>
+                      <th>Area (mm²)</th>
+                      <th>Detected Risk</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -90,4 +264,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Include your custom dashboard JS -->
   <script src="{{ url_for('static', filename='assets/js/pages/dashboard-default.js') }}"></script>
+  <!-- Optional: If using DataTables, include its JS (ensure the corresponding CSS is loaded) -->
+  <script>
+    // Initialize DataTable on the table.
+    new DataTable('#example', {
+      pageLength: 10
+    });
+  </script>
 {% endblock extra_js %}
