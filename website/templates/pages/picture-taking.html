@@ -1,29 +1,43 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}Camera Page{% endblock %}
+{% block title %} Skin Disease Check {% endblock %}
 
 {% block content %}
 <div class="pc-container">
-  <div class="pc-content">
-    <h3 class="mb-4">🎥 Take a Picture or Record Video</h3>
+  <div class="pc-content text-center">
+    <h3 class="mb-4">🩺 Skin Disease Check</h3>
 
-    <!-- Video Preview -->
-    <div class="mb-3">
+    <!-- Video & Overlay Canvas -->
+    <div class="position-relative d-inline-block">
       <video id="video" width="640" height="480" class="border rounded" autoplay></video>
+      <canvas id="overlay" width="640" height="480" class="position-absolute top-0 start-0"></canvas>
     </div>
 
     <!-- Buttons -->
-    <div class="mb-4">
-      <button class="btn btn-outline-success me-2" onclick="takePhoto()">📸 Take Photo</button>
-      <button id="startBtn" class="btn btn-outline-primary me-2" onclick="startRecording()">⏺ Start Recording</button>
+    <div class="mb-4 d-flex justify-content-center flex-wrap gap-2 mt-3">
+      <button class="btn btn-outline-success" onclick="takePhoto()">📸 Take Photo</button>
+      <button id="startBtn" class="btn btn-outline-primary" onclick="startRecording()">⏺ Start Recording</button>
       <button id="stopBtn" class="btn btn-outline-secondary" onclick="stopRecording()">⏹ Stop Recording</button>
+      <button class="btn btn-outline-warning" onclick="clearAll()">🧹 Clear All</button>
     </div>
 
-    <!-- Hidden Canvas for Photos -->
+    <!-- Detection Status -->
+    <div id="detection-status" class="text-center fw-bold mb-4 text-secondary">
+      🧠 Waiting for detection...
+    </div>
+    
+    <!-- Hidden Canvas -->
     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
 
-    <!-- Output: Images or Video -->
-    <div id="output"></div>
+    <!-- Output Gallery -->
+    <div id="output" class="row justify-content-center mt-4"></div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+      <a href="{{ url_for('home_blueprint.dashboard') }}" class="btn btn-lg btn-primary">
+        🔙 Back to Dashboard
+      </a>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -32,9 +46,12 @@
 <script>
   const video = document.getElementById('video');
   const canvas = document.getElementById('canvas');
+  const overlay = document.getElementById('overlay');
+  const overlayCtx = overlay.getContext('2d');
   const output = document.getElementById('output');
   const startBtn = document.getElementById('startBtn');
   const stopBtn = document.getElementById('stopBtn');
+  const statusBox = document.getElementById('detection-status');
   let mediaRecorder;
   let chunks = [];
 
@@ -42,54 +59,109 @@
     .then(stream => {
       video.srcObject = stream;
       mediaRecorder = new MediaRecorder(stream);
-
       mediaRecorder.ondataavailable = e => chunks.push(e.data);
-
-      mediaRecorder.onstop = e => {
+      mediaRecorder.onstop = () => {
         const blob = new Blob(chunks, { type: 'video/webm' });
         const videoURL = URL.createObjectURL(blob);
-        const videoTag = document.createElement('video');
-        videoTag.controls = true;
-        videoTag.src = videoURL;
-        videoTag.className = 'mt-3 border rounded';
-        output.appendChild(videoTag);
+        createMediaCard('video', videoURL);
         chunks = [];
       };
     });
 
+  setInterval(() => { //
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataURL = canvas.toDataURL('image/png');
+
+    fetch('/api/detect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: dataURL })
+    })
+    .then(res => res.json())
+    .then(data => drawBoxes(data.boxes));
+  }, 1000);
+
+  function drawBoxes(boxes) {
+  overlayCtx.clearRect(0, 0, overlay.width, overlay.height);
+
+  if (boxes.length === 0) {
+    statusBox.innerText = '✅ No issues detected';
+    statusBox.className = 'text-center fw-bold mb-4 text-success';
+    return;
+  }
+
+  statusBox.innerText = '⚠️ You Got Skin Cancer!!!!';
+  statusBox.className = 'text-center fw-bold mb-4 text-danger';
+
+  boxes.forEach(box => {
+    overlayCtx.strokeStyle = 'red';
+    overlayCtx.lineWidth = 3;
+    overlayCtx.strokeRect(box.x, box.y, box.width, box.height);
+    overlayCtx.font = '16px Arial';
+    overlayCtx.fillStyle = 'red';
+    overlayCtx.fillText(box.label, box.x, box.y - 5);
+  });
+}
+
+
   function takePhoto() {
-    const context = canvas.getContext('2d');
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const img = document.createElement('img');
-    img.src = canvas.toDataURL('image/png');
-    img.className = 'mt-3 border rounded';
-    output.appendChild(img);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imgSrc = canvas.toDataURL('image/png');
+    createMediaCard('image', imgSrc);
   }
 
   function startRecording() {
-    output.innerHTML = '';
     mediaRecorder.start();
-
     startBtn.innerText = '🔴 Recording...';
     startBtn.classList.remove('btn-outline-primary');
     startBtn.classList.add('btn-danger');
     startBtn.disabled = true;
-
     stopBtn.disabled = false;
   }
 
   function stopRecording() {
     mediaRecorder.stop();
-
     startBtn.innerText = '⏺ Start Recording';
     startBtn.classList.remove('btn-danger');
     startBtn.classList.add('btn-outline-primary');
     startBtn.disabled = false;
-
     stopBtn.disabled = true;
   }
 
-  // 初始化时禁用 stop 录制按钮
+  function clearAll() {
+    if (confirm("Are you sure you want to delete all captured media?")) {
+      output.innerHTML = '';
+    }
+  }
+
+  function createMediaCard(type, src) {
+    const col = document.createElement('div');
+    col.className = 'col-md-6 col-lg-4 mb-4';
+
+    const card = document.createElement('div');
+    card.className = 'card shadow-sm border';
+
+    const media = document.createElement(type === 'image' ? 'img' : 'video');
+    media.className = 'card-img-top';
+    media.src = src;
+    if (type === 'video') media.controls = true;
+
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body text-center';
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'btn btn-outline-danger btn-sm';
+    deleteBtn.innerText = '❌ Delete';
+    deleteBtn.onclick = () => col.remove();
+
+    cardBody.appendChild(deleteBtn);
+    card.appendChild(media);
+    card.appendChild(cardBody);
+    col.appendChild(card);
+    output.appendChild(col);
+  }
+
   window.onload = () => {
     stopBtn.disabled = true;
   }
