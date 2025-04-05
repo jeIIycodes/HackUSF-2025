@@ -1,0 +1,29 @@
+Metadata-Version: 2.1
+Name: htmlminf
+Version: 0.1.13
+Summary: An HTML Minifier
+Home-page: https://htmlmin.readthedocs.io/en/latest/
+Download-URL: https://github.com/mrf345/htmlminf
+Author: Mohamed Feddad
+Author-email: mrf345@gmail.com
+License: BSD
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Topic :: Text Processing :: Markup :: HTML
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+**NOTE: This is a fork of htmlmin**
+
+A configurable HTML Minifier with safety features.
+
+Documentation: https://htmlmin.readthedocs.io/en/latest/
+
+<a href='https://github.com/mrf345/htmlminf/actions/workflows/ci.yml'>
+  <img src='https://github.com/mrf345/htmlminf/actions/workflows/ci.yml/badge.svg'>
+</a>
