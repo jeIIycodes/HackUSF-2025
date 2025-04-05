@@ -1,0 +1,97 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Camera Page{% endblock %}
+
+{% block content %}
+<div class="pc-container">
+  <div class="pc-content">
+    <h3 class="mb-4">🎥 Take a Picture or Record Video</h3>
+
+    <!-- Video Preview -->
+    <div class="mb-3">
+      <video id="video" width="640" height="480" class="border rounded" autoplay></video>
+    </div>
+
+    <!-- Buttons -->
+    <div class="mb-4">
+      <button class="btn btn-outline-success me-2" onclick="takePhoto()">📸 Take Photo</button>
+      <button id="startBtn" class="btn btn-outline-primary me-2" onclick="startRecording()">⏺ Start Recording</button>
+      <button id="stopBtn" class="btn btn-outline-secondary" onclick="stopRecording()">⏹ Stop Recording</button>
+    </div>
+
+    <!-- Hidden Canvas for Photos -->
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+
+    <!-- Output: Images or Video -->
+    <div id="output"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const output = document.getElementById('output');
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  let mediaRecorder;
+  let chunks = [];
+
+  navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+      video.srcObject = stream;
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = e => chunks.push(e.data);
+
+      mediaRecorder.onstop = e => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const videoURL = URL.createObjectURL(blob);
+        const videoTag = document.createElement('video');
+        videoTag.controls = true;
+        videoTag.src = videoURL;
+        videoTag.className = 'mt-3 border rounded';
+        output.appendChild(videoTag);
+        chunks = [];
+      };
+    });
+
+  function takePhoto() {
+    const context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const img = document.createElement('img');
+    img.src = canvas.toDataURL('image/png');
+    img.className = 'mt-3 border rounded';
+    output.appendChild(img);
+  }
+
+  function startRecording() {
+    output.innerHTML = '';
+    mediaRecorder.start();
+
+    startBtn.innerText = '🔴 Recording...';
+    startBtn.classList.remove('btn-outline-primary');
+    startBtn.classList.add('btn-danger');
+    startBtn.disabled = true;
+
+    stopBtn.disabled = false;
+  }
+
+  function stopRecording() {
+    mediaRecorder.stop();
+
+    startBtn.innerText = '⏺ Start Recording';
+    startBtn.classList.remove('btn-danger');
+    startBtn.classList.add('btn-outline-primary');
+    startBtn.disabled = false;
+
+    stopBtn.disabled = true;
+  }
+
+  // 初始化时禁用 stop 录制按钮
+  window.onload = () => {
+    stopBtn.disabled = true;
+  }
+</script>
+{% endblock %}

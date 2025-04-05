@@ -30,6 +30,10 @@ def icon_feather():
 def color():
     return render_template('pages/color.html', segment='color')
 
+@blueprint.route('/picture-taking')
+def take_media():
+    return render_template('pages/picture-taking.html', segment='picture-taking')
+
 @blueprint.route('/sample_page')
 def sample_page():
     return render_template('pages/sample-page.html', segment='sample_page')
