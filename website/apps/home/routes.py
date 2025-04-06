@@ -4,7 +4,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 import base64
 import time
-from flask import jsonify
+from flask import jsonify, session
 import base64
 import io
 from flask import request, jsonify
@@ -34,11 +34,48 @@ class DemographicForm(FlaskForm):
     vital_status = wtforms.StringField("Vital Status")
 
 
+# Default demographic values
+DEFAULT_DEMOGRAPHICS = {
+    'age': 30,
+    'gender': 'Male',
+    'race': 'White',
+    'ethnicity': 'Not Hispanic or Latino',
+    'country_of_birth': 'United States'
+}
+
+
 @blueprint.route('/')
 @blueprint.route('/index')
 def index():
-    return render_template('pages/index.html', segment='index')
+    # Retrieve cached demographics from session, or use defaults
+    demographics = session.get('demographics', DEFAULT_DEMOGRAPHICS)
+    return render_template('pages/index.html', segment='index', demographics=demographics)
 
+@blueprint.route('/assessment', methods=['GET', 'POST'])
+def demographic_assessment():
+    # Get cached demographics from session if available
+    cached_data = session.get('demographics')
+    if cached_data:
+        # Populate the form with existing session data
+        form = DemographicForm(data=cached_data)
+    else:
+        # Instantiate form without any data so defaults are used
+        form = DemographicForm()
+        form.process()  # Ensures defaults are set
+
+    if form.validate_on_submit():
+        session['demographics'] = {
+            'age': form.age.data,
+            'gender': form.gender.data,
+            'race': form.race.data,
+            'ethnicity': form.ethnicity.data,
+            'country_of_birth': form.country_of_birth.data
+        }
+        return redirect(url_for('home_blueprint.index'))
+
+    return render_template('pages/assessment.html', form=form)
+
+    return render_template('pages/assessment.html', form=form)
 @blueprint.route('/icon_feather')
 def icon_feather():
     return render_template('pages/icon-feather.html', segment='icon_feather')
@@ -223,16 +260,6 @@ def error_500():
 @blueprint.errorhandler(500)
 def not_found_error(error):
     return redirect(url_for('error-500'))
-
-@blueprint.route('/assessment', methods=['GET', 'POST'])
-def demographic_assessment():
-    form = DemographicForm()
-
-    if form.validate_on_submit():
-        # 可记录 session 或写入数据库
-        return redirect(url_for('home_blueprint.index'))  # 可跳回首页或 result 页面
-
-    return render_template('pages/assessment.html', form=form)
 
 
 # Celery (to be refactored)
