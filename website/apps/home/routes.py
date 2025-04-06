@@ -25,6 +25,15 @@ from apps.tasks import *
 from apps.authentication.models import Users
 from flask_wtf import FlaskForm
 
+class DemographicForm(FlaskForm):
+    age = wtforms.IntegerField("Age")
+    gender = wtforms.StringField("Gender")
+    race = wtforms.StringField("Race")
+    ethnicity = wtforms.StringField("Ethnicity")
+    country_of_birth = wtforms.StringField("Country of Birth")
+    vital_status = wtforms.StringField("Vital Status")
+
+
 @blueprint.route('/')
 @blueprint.route('/index')
 def index():
@@ -214,6 +223,17 @@ def error_500():
 @blueprint.errorhandler(500)
 def not_found_error(error):
     return redirect(url_for('error-500'))
+
+@blueprint.route('/assessment', methods=['GET', 'POST'])
+def demographic_assessment():
+    form = DemographicForm()
+
+    if form.validate_on_submit():
+        # 可记录 session 或写入数据库
+        return redirect(url_for('home_blueprint.index'))  # 可跳回首页或 result 页面
+
+    return render_template('pages/assessment.html', form=form)
+
 
 # Celery (to be refactored)
 @blueprint.route('/tasks-test')
