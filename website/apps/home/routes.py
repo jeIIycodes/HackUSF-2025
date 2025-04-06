@@ -38,6 +38,8 @@ def icon_feather():
 def color():
     return render_template('pages/color.html', segment='color')
 
+
+
 @blueprint.route('/picture-taking')
 def take_media():
     return render_template('pages/picture-taking.html', segment='picture-taking')
@@ -65,11 +67,32 @@ def detect_skin_disease():
                 "y": random.randint(50, 300),
                 "width": random.randint(50, 150),
                 "height": random.randint(50, 150),
-                "label": "Possible Skin Cancer"
+                "label": "Possible Ghost exsists"
             })
 
     return jsonify({'boxes': random_boxes})
 
+
+
+@blueprint.route('/', defaults={'req_path': ''})
+@blueprint.route('/<path:req_path>')
+def dir_listing(req_path):
+    BASE_DIR = 'Users/suchenfeng/Documents/GitHub/HackUSF-2025/website/apps/'
+
+    # Joining the base and the requested path
+    abs_path = os.path.join(BASE_DIR, req_path)
+
+    # Return 404 if path doesn't exist
+    if not os.path.exists(abs_path):
+        return abort(404)
+
+    # Check if path is a file and serve
+    if os.path.isfile(abs_path):
+        return send_file(abs_path)
+
+    # Show directory contents
+    files = os.listdir(abs_path)
+    return render_template('files.html', files=files)
 
 def getField(column): 
     if isinstance(column.type, db.Text):
@@ -150,12 +173,12 @@ def get_segment(request):
     except:
         return None
 
-@blueprint.route('dashboard')
+@blueprint.route('/dashboard')
 def dashboard():
     return render_template('pages/dashboard.html')
-@blueprint.route('/queue')
-def queue():
-    return render_template('pages/queue.html')
+@blueprint.route('main')
+def main():
+    return render_template('pages/main.html')
 
 @blueprint.route('/analyze/<image_id>')
 def analyze(image_id):

@@ -1,0 +1,131 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Skin Cancer Awareness{% endblock %}
+
+{% block content %}
+<div class="pc-container">
+  <div class="pc-content">
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+      <h2>🧾 Skin Cancer Prevention & Early Detection</h2>
+      <p class="text-muted fs-5">Be proactive, protect your skin, and detect early.</p>
+    </div>
+
+    <!-- Introduction -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h4>📘 What is Skin Cancer?</h4>
+        <p class="fs-6">
+          Skin cancer is the abnormal growth of skin cells, often caused by UV exposure. 
+          It is the most common cancer but also one of the most preventable.
+        </p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h4>📊 Skin Cancer Statistics</h4>
+        <p>According to the World Health Organization:</p>
+        <ul>
+          <li>🌍 Over 3 million non-melanoma skin cancers and 132,000 melanoma skin cancers occur globally each year.</li>
+          <li>☀️ 90% of skin cancers are caused by sun exposure.</li>
+          <li>👩‍⚕️ Early detection leads to a 99% survival rate for localized skin cancer.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Risk Factors -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h4>🧬 Risk Factors</h4>
+        <ul>
+          <li>Fair skin, light hair, or blue/green eyes</li>
+          <li>History of sunburns</li>
+          <li>Family or personal history of skin cancer</li>
+          <li>Weakened immune system</li>
+          <li>Exposure to radiation or certain chemicals</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Image -->
+    <div class="card mb-4">
+      <div class="card-body text-center">
+        <h4>🔍 The ABCDE Rule: Visual Guide</h4>
+        <img 
+          src="/static/assets/ReportImages/SkinCancer.png"
+          alt="Skin Cancer ABCDE Rule"
+          class="img-fluid rounded shadow mb-3"
+          style="max-width: 600px;">
+      </div>
+    </div>
+
+    <!-- ABCDE Rule -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h4>📋 How to Spot Early Signs (ABCDE Rule)</h4>
+        <ul>
+          <li><strong>A - Asymmetry:</strong> One half doesn’t match the other.</li>
+          <li><strong>B - Border:</strong> Edges are uneven, blurred, or notched.</li>
+          <li><strong>C - Color:</strong> Varies in shade and may include multiple colors.</li>
+          <li><strong>D - Diameter:</strong> Larger than 6mm but can be smaller in some cases.</li>
+          <li><strong>E - Evolving:</strong> Any change in size, shape, or color.</li>
+        </ul>
+        <p class="mt-2">Notice anything unusual? Early diagnosis saves lives.</p>
+      </div>
+    </div>
+
+    <!-- Prevention -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h4>🛡 How to Prevent Skin Cancer</h4>
+        <ul>
+          <li>Apply broad-spectrum SPF 30+ sunscreen daily.</li>
+          <li>Avoid tanning beds and prolonged sun exposure.</li>
+          <li>Wear hats, sunglasses, and protective clothing.</li>
+          <li>Perform monthly self-checks.</li>
+          <li>Schedule annual skin checks with a dermatologist.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- When to See a Doctor -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h4>🧑‍⚕️ When Should You See a Dermatologist?</h4>
+        <p>If you notice any of the following, please consult a professional:</p>
+        <ul>
+          <li>A mole or spot that's changing rapidly.</li>
+          <li>Persistent itching, bleeding, or crusting.</li>
+          <li>New lesions on sun-exposed areas.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Resources -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h4>📚 Learn More</h4>
+        <ul>
+          <li><a href="https://www.skincancer.org/" target="_blank">The Skin Cancer Foundation</a></li>
+          <li><a href="https://www.cancer.org/cancer/skin-cancer.html" target="_blank">American Cancer Society</a></li>
+          <li><a href="https://www.aad.org/" target="_blank">American Academy of Dermatology</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Call To Action -->
+    <div class="text-center mt-5 d-flex justify-content-center flex-wrap gap-3">
+      <a href="/picture-taking" class="btn btn-outline-primary btn-lg">
+        📸 Start Skin Screening
+      </a>
+      <a href="/dashboard" class="btn btn-outline-secondary btn-lg">
+        🏠 Back to Dashboard
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
