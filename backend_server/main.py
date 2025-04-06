@@ -137,8 +137,8 @@ def analyze():
         # Get prediction probabilities from the XGB model
         probabilities = xgb_model.predict_proba(features_scaled)
         # (Optional adjustment if needed)
-        probabilities[0][2] *= 0.01
-        probabilities[0][1] *= 0.7
+        probabilities[0][2] *= 0.05
+        probabilities[0][1] *= 0.65
         probabilities[0] /= np.sum(probabilities[0])
 
         pred_class = np.argmax(probabilities, axis=1)[0]
