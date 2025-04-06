@@ -1,143 +1,158 @@
 'use strict';
-// [ world-low chart ] start
-(function () {
-    var map = new jsVectorMap({
-        selector: "#world-low",
-        map: "world",
-        markersSelectable: true,
-        markers: [{
-                coords: [-14.2350, -51.9253]
-            },
-            {
-                coords: [35.8617, 104.1954]
-            },
-            {
-                coords: [61, 105]
-            },
-            {
-                coords: [26.8206, 30.8025]
-            }
-        ],
-        markerStyle: {
-            initial: {
-                fill: '#3f4d67',
 
-            },
-            hover: {
-                fill: '#04a9f5',
-            },
-        },
-        markerLabelStyle: {
-            initial: {
-                fontFamily: "'Inter', sans-serif",
-                fontSize: 13,
-                fontWeight: 500,
-                fill: '#3f4d67',
-            },
-        },
-    });
-})();
-// [ world-low chart ] end
+document.addEventListener('DOMContentLoaded', function() {
+  // Helper function to create a Chart.js line chart with delayed animations and conditional red filling.
+  function createChart(canvasId, data, threshold) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    // Generate day labels from the data length
+    const labels = data.map((_, index) => index + 1);
 
-// [ Widget-line-chart ] start
-var options = {
-    chart: {
-        type: 'line',
-        height: 210,
-        zoom: {
-            enabled: false
-        },
-        toolbar: {
-            show: false,
-        },
-    },
-    dataLabels: {
-        enabled: false,
-    },
-    colors: ["#fff"],
-    fill: {
-        type: 'solid',
-    },
-    plotOptions: {
-        bar: {
-            columnWidth: '30%',
-        }
-    },
-    series: [{
-        data: [10, 60, 45, 72, 45, 86]
-    }],
-    xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        axisBorder: {
-            show: false,
-        },
-        axisTicks: {
-            show: false,
-        },
-        labels: {
-            style: {
-                colors: "#fff"
+    const config = {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Radius (mm)',
+            data: data,
+            borderColor: 'rgba(75, 192, 192, 1)', // Blue line
+            fill: false,
+            tension: 0.1,
+            // Animate blue line first.
+            animations: {
+              y: {
+                duration: 1500,
+                easing: 'easeInOutElastic',
+                delay: 0
+              }
+            },
+            // Use scriptable options to adjust point styling:
+            pointRadius: function(context) {
+              const value = context.raw;
+              return (value > threshold) ? 8 : 3;
+            },
+            pointBackgroundColor: function(context) {
+              const value = context.raw;
+              return (value > threshold) ? 'orange' : 'rgba(75, 192, 192, 1)';
             }
-        },
-    },
-    yaxis: {
-        axisBorder: {
-            show: false,
-        },
-        axisTicks: {
-            show: false,
-        },
-        crosshairs: {
-            width: 0
-        },
-        labels: {
-            show: false,
-        },
-    },
-    grid: {
-        padding: {
-            bottom: 0,
-            left: 10,
-        },
-        xaxis: {
-            lines: {
-                show: false
+          },
+          {
+            label: 'Threshold',
+            data: Array(data.length).fill(threshold),
+            borderColor: 'rgba(255, 99, 132, 1)', // Red dashed line
+            borderDash: [5, 5],
+            fill: false,
+            pointRadius: 0,
+            tension: 0.1,
+            // Animate red dashed line with a delay.
+            animations: {
+              y: {
+                duration: 1500,
+                easing: 'easeInOutElastic',
+                delay: 1500
+              }
             }
-        },
-        yaxis: {
-            lines: {
-                show: false
-            }
-        },
-    },
-    markers: {
-        size: 5,
-        colors: '#fff',
-        opacity: 0.9,
-        strokeWidth: 2,
-        hover: {
-            size: 7,
-        }
-    },
-    tooltip: {
-        fixed: {
-            enabled: false
-        },
-        x: {
-            show: false
-        },
-        y: {
+          }
+        ]
+      },
+      options: {
+        scales: {
+          x: {
             title: {
-                formatter: function (seriesName) {
-                    return 'Statistics :'
-                }
+              display: true,
+              text: 'Weeks'
             }
-        },
-        marker: {
-            show: false
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Radius (mm)'
+            }
+          }
         }
-    }
-};
-var chart = new ApexCharts(document.querySelector("#Widget-line-chart"), options);
-chart.render();
-// [ Widget-line-chart ] end
+      },
+      plugins: []
+    };
+
+    // Custom plugin: Fill with red the area where the blue line is above the threshold.
+    config.plugins.push({
+      id: 'fillRedPlugin',
+      afterDatasetsDraw: function(chart) {
+        const ctx = chart.ctx;
+        const chartArea = chart.chartArea;
+        const yScale = chart.scales.y;
+        // Get the pixel coordinate for the threshold value.
+        const thresholdY = yScale.getPixelForValue(threshold);
+
+        // Get the blue line meta data.
+        const blueMeta = chart.getDatasetMeta(0);
+        if (!blueMeta || !blueMeta.data) return;
+
+        ctx.save();
+        // Set a semi-transparent red fill.
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+
+        // Iterate through each consecutive pair of points on the blue line.
+        for (let i = 0; i < blueMeta.data.length - 1; i++) {
+          const p0 = blueMeta.data[i];
+          const p1 = blueMeta.data[i+1];
+          const x0 = p0.x, y0 = p0.y;
+          const x1 = p1.x, y1 = p1.y;
+
+          // Determine if each point is above the threshold.
+          const p0Above = y0 < thresholdY;
+          const p1Above = y1 < thresholdY;
+
+          if (p0Above && p1Above) {
+            // Both points are above the threshold.
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
+            ctx.lineTo(x1, thresholdY);
+            ctx.lineTo(x0, thresholdY);
+            ctx.closePath();
+            ctx.fill();
+          } else if (p0Above && !p1Above) {
+            // p0 is above, p1 is below the threshold: compute intersection.
+            const t = (thresholdY - y0) / (y1 - y0);
+            const xi = x0 + t * (x1 - x0);
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(xi, thresholdY);
+            ctx.lineTo(x0, thresholdY);
+            ctx.closePath();
+            ctx.fill();
+          } else if (!p0Above && p1Above) {
+            // p0 is below, p1 is above: compute intersection.
+            const t = (thresholdY - y0) / (y1 - y0);
+            const xi = x0 + t * (x1 - x0);
+            ctx.beginPath();
+            ctx.moveTo(xi, thresholdY);
+            ctx.lineTo(x1, y1);
+            ctx.lineTo(x1, thresholdY);
+            ctx.closePath();
+            ctx.fill();
+          }
+          // If both points are below the threshold, no fill is needed.
+        }
+        ctx.restore();
+      }
+    });
+
+    new Chart(ctx, config);
+  }
+
+  // Example dummy data arrays and thresholds for demonstration.
+  const leftElbowData = [5, 5.1, 5.3, 5.9, 6.8, 7.1, 7.5];
+  const leftThighData = [6, 6.3, 6.7, 7.1, 7.5, 7.3, 7];
+  const rightShoulderData = [4, 4.3, 4.8, 4.7, 4.5, 4.6, 4.0];
+
+  const leftElbowThreshold = 7;
+  const leftThighThreshold = 7.3;
+  const rightShoulderThreshold = 5;
+
+  // Create the charts for each tab.
+  createChart('chart-left-elbow', leftElbowData, leftElbowThreshold);
+  createChart('chart-left-thigh', leftThighData, leftThighThreshold);
+  createChart('chart-right-shoulder', rightShoulderData, rightShoulderThreshold);
+});

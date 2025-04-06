@@ -15,7 +15,7 @@ gdc_cohort = minds.build_cohort(
     manifest=MANIFEST_PATH if os.path.exists(MANIFEST_PATH) else None,
 )
 # # to get the cohort details
-gdc_cohort.stats()
+print(gdc_cohort.stats())
 
 # load the tsv file
 ids = pd.read_csv("cohort_hackathon_cohort.2025-03-20 (1).tsv", sep="\t", dtype=str)
@@ -28,4 +28,5 @@ for table in tables:
     )
     query_df.to_csv(f"./download/{table}.csv", index=False)
 
-gdc_cohort.download(threads=16)
+gdc_cohort.download(threads=64, exclude=["Slide Image"])
+

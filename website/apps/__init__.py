@@ -17,7 +17,7 @@ def register_extensions(app):
     login_manager.init_app(app)
 
 def register_blueprints(app):
-    for module_name in ('authentication', 'home', 'dyn_dt', 'charts', ):
+    for module_name in ('authentication', 'home', 'dyn_dt', 'charts', 'assessment'):  # 🟢 added 'assessment'
         module = import_module('apps.{}.routes'.format(module_name))
         app.register_blueprint(module.blueprint)
 
@@ -29,8 +29,8 @@ def create_app(config):
     static_prefix = '/static'
     templates_dir = os.path.dirname(config.BASE_DIR)
 
-    TEMPLATES_FOLDER = os.path.join(templates_dir,'templates')
-    STATIC_FOLDER = os.path.join(templates_dir,'static')
+    TEMPLATES_FOLDER = os.path.join(templates_dir, 'templates')
+    STATIC_FOLDER = os.path.join(templates_dir, 'static')
 
     print(' > TEMPLATES_FOLDER: ' + TEMPLATES_FOLDER)
     print(' > STATIC_FOLDER:    ' + STATIC_FOLDER)
