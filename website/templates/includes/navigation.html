@@ -12,10 +12,11 @@
     </div>
 
     <div class="ms-auto">
-      <ul class="list-unstyled">
+      <ul class="list-unstyled d-flex align-items-center">
+
         <!-- 🔔 通知铃铛 -->
-        <li class="dropdown pc-h-item">
-          <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+        <li class="dropdown pc-h-item me-3">
+          <a class="pc-head-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
             <i data-feather="bell"></i>
             <span class="badge bg-danger pc-h-badge" id="notif-count">2</span>
           </a>
@@ -24,11 +25,8 @@
               <h5 class="m-0">Notifications</h5>
               <a href="#!" class="btn btn-link btn-sm" onclick="markAllRead()">Mark all read</a>
             </div>
-
-            <!-- 通知内容 -->
             <div id="notif-body" class="dropdown-body text-wrap header-notification-scroll position-relative" style="max-height: calc(100vh - 215px)">
               <p class="text-span">Today</p>
-
               <div class="card mb-0">
                 <div class="card-body d-flex">
                   <div class="flex-grow-1">
@@ -38,7 +36,6 @@
                   </div>
                 </div>
               </div>
-
               <div class="card mb-0">
                 <div class="card-body d-flex">
                   <div class="flex-grow-1">
@@ -49,12 +46,18 @@
                 </div>
               </div>
             </div>
-
-            <!-- 清除按钮 -->
             <div class="text-center py-2">
               <a href="#!" class="link-danger" onclick="clearAllNotifications()">Clear all Notifications</a>
             </div>
           </div>
+        </li>
+
+        <!-- 👤 登录注册按钮 -->
+        <li class="pc-h-item me-2">
+          <a href="{{ url_for('authentication_blueprint.login') }}" class="btn btn-outline-primary btn-sm">Login</a>
+        </li>
+        <li class="pc-h-item">
+          <a href="{{ url_for('authentication_blueprint.register') }}" class="btn btn-primary btn-sm">Register</a>
         </li>
       </ul>
     </div>
