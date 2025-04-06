@@ -1,0 +1,33 @@
+File Name,PatientID,Primary Diagnosis
+TCGA-ER-A19F-06A-01-TSA.jpg,TCGA-ER-A19F,Malignant melanoma
+TCGA-FS-A1ZK-06A-01-TSA.jpg,TCGA-FS-A1ZK,Malignant melanoma
+TCGA-FS-A1ZK-06A-01-TSA.jpg,TCGA-FS-A1ZK,Not Reported
+TCGA-HR-A2OG-01Z-00-DX1.jpg,TCGA-HR-A2OG,Malignant melanoma
+TCGA-EE-A20H-06A-01-TS1.jpg,TCGA-EE-A20H,Malignant melanoma
+TCGA-EE-A20H-06A-01-TS1.jpg,TCGA-EE-A20H,Papillary adenocarcinoma
+TCGA-BF-A1PX-01A-01-TSA.jpg,TCGA-BF-A1PX,Malignant melanoma
+TCGA-HR-A5NC-01Z-00-DX1.jpg,TCGA-HR-A5NC,Malignant melanoma
+TCGA-HR-A5NC-01A-01-TS1.jpg,TCGA-HR-A5NC,Malignant melanoma
+TCGA-FS-A1Z3-06A-01-TSA.jpg,TCGA-FS-A1Z3,Malignant melanoma
+TCGA-FS-A1Z3-06A-01-TSA.jpg,TCGA-FS-A1Z3,Not Reported
+TCGA-EB-A24C-01A-01-TSA.jpg,TCGA-EB-A24C,Malignant melanoma
+TCGA-BF-A1Q0-01A-02-TSB.jpg,TCGA-BF-A1Q0,Malignant melanoma
+TCGA-FS-A1Z0-06A-01-TSA.jpg,TCGA-FS-A1Z0,Malignant melanoma
+TCGA-D3-A5GO-06Z-00-DX1.jpg,TCGA-D3-A5GO,Malignant melanoma
+TCGA-D3-A5GO-06Z-00-DX1.jpg,TCGA-D3-A5GO,Squamous cell carcinoma
+TCGA-D3-A5GO-06Z-00-DX1.jpg,TCGA-D3-A5GO,Basal cell carcinoma
+TCGA-D3-A5GO-06Z-00-DX1.jpg,TCGA-D3-A5GO,Melanoma
+TCGA-FW-A5DX-01Z-00-DX1.jpg,TCGA-FW-A5DX,Malignant melanoma
+TCGA-BF-AAP8-01A-01-TSA.jpg,TCGA-BF-AAP8,Epithelioid cell melanoma
+TCGA-BF-AAP8-01A-01-TSA.jpg,TCGA-BF-AAP8,Malignant melanoma
+TCGA-FS-A4FC-06A-01-TS1.jpg,TCGA-FS-A4FC,Malignant melanoma
+TCGA-ER-A19T-01Z-00-DX1.jpg,TCGA-ER-A19T,Malignant melanoma
+TCGA-ER-A19T-01Z-00-DX1.jpg,TCGA-ER-A19T,Acral lentiginous melanoma; malignant
+TCGA-EE-A3J5-06A-01-TS1.jpg,TCGA-EE-A3J5,Malignant melanoma
+TCGA-EE-A3J5-06Z-00-DX1.jpg,TCGA-EE-A3J5,Malignant melanoma
+TCGA-D3-A8GE-06Z-00-DX1.jpg,TCGA-D3-A8GE,Spindle cell melanoma
+TCGA-DA-A1I5-06A-01-TSA.jpg,TCGA-DA-A1I5,Malignant melanoma
+TCGA-DA-A1I5-01Z-00-DX1.jpg,TCGA-DA-A1I5,Malignant melanoma
+TCGA-BF-A5ES-01A-01-TS1.jpg,TCGA-BF-A5ES,Malignant melanoma
+TCGA-D9-A1X3-06A-01-TS1.jpg,TCGA-D9-A1X3,Malignant melanoma
+TCGA-ER-A19S-01Z-00-DX1.jpg,TCGA-ER-A19S,Malignant melanoma
