@@ -8,8 +8,12 @@ from skimage.color import rgb2lab
 from skimage.util import img_as_float
 from scipy.stats import skew, kurtosis
 import xgboost
-app = Flask(__name__)
+from flask_cors import CORS
 
+
+
+app = Flask(__name__)
+CORS(app)
 # Load the final model and scaler at startup
 try:
     model = joblib.load('final_skin_cancer_model.pkl')
@@ -94,7 +98,10 @@ def analyze():
 
         # Map the predicted index to a class label
         label = "Benign" if pred_class == 0 else "Malignant"
-
+        print({
+            "classification": label,
+            "probability": float(pred_prob)
+        })
         return jsonify({
             "classification": label,
             "probability": float(pred_prob)

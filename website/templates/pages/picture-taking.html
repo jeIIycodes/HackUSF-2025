@@ -14,8 +14,13 @@
     </div>
 
     <!-- Detection Status -->
-    <div id="detection-status" class="text-center fw-bold mb-4 text-secondary mt-3">
+    <div id="detection-status" class="text-center fw-bold mb-2 text-secondary mt-3">
       🧠 Waiting for detection...
+    </div>
+
+    <!-- AI Result Display -->
+    <div id="ai-result" class="text-center fw-bold mb-4 text-dark">
+      <!-- Result will be shown here -->
     </div>
 
     <!-- Hidden Canvas for Capture -->
@@ -32,51 +37,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-  const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
-  const overlay = document.getElementById('overlay');
-  const overlayCtx = overlay.getContext('2d');
-  const statusBox = document.getElementById('detection-status');
-
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      video.srcObject = stream;
-    });
-
-  setInterval(() => {
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataURL = canvas.toDataURL('image/png');
-
-    fetch('/api/detect', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: dataURL })
-    })
-    .then(res => res.json())
-    .then(data => drawBoxes(data.boxes));
-  }, 1000);
-
-  function drawBoxes(boxes) {
-    overlayCtx.clearRect(0, 0, overlay.width, overlay.height);
-
-    if (!boxes || boxes.length === 0) {
-      statusBox.innerText = '✅ No issues detected';
-      statusBox.className = 'text-center fw-bold mb-4 text-success';
-      return;
-    }
-
-    statusBox.innerText = '⚠️ Possible Signs Detected';
-    statusBox.className = 'text-center fw-bold mb-4 text-danger';
-
-    boxes.forEach(box => {
-      overlayCtx.strokeStyle = 'red';
-      overlayCtx.lineWidth = 3;
-      overlayCtx.strokeRect(box.x, box.y, box.width, box.height);
-      overlayCtx.font = '16px Arial';
-      overlayCtx.fillStyle = 'red';
-      overlayCtx.fillText(box.label, box.x, box.y - 5);
-    });
-  }
-</script>
+<script src="{{ url_for('static', filename='assets/js/skin_detection.js') }}"></script>
 {% endblock %}
