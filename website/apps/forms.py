@@ -16,11 +16,5 @@ class DemographicForm(FlaskForm):
     ethnicity = StringField("Ethnicity", default="Not Hispanic or Latino", validators=[Optional()])
     country_of_birth = StringField("Country of Birth", default="United States", validators=[Optional()])
 
-    vital_status = SelectField(
-        "Vital Status",
-        choices=[('Alive', 'Alive'), ('Dead', 'Dead')],
-        default='Alive',
-        validators=[Optional()]
-    )
 
     submit = SubmitField("Submit Assessment")

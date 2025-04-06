@@ -60,14 +60,35 @@
           </div>
         </div>
 
-        <!-- Right Box: Blank widget remains unchanged -->
+        <!-- Top Right Box: Demographic Information -->
         <div class="col-md-6">
           <div class="card">
+            <div class="card-header">
+              <h5>Demographic Information</h5>
+            </div>
             <div class="card-body">
-              <!-- Blank widget - add your content here -->
+              <form action="/assessment" method="get">
+                <div class="mb-3">
+                  <label class="form-label">Age: 30</label>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Gender: Male</label>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Race: White</label>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Ethnicity: Not Hispanic or Latino</label>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Country of Birth: United State</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+              </form>
             </div>
           </div>
         </div>
+
       </div>
 
       <!-- Bottom Row: Table with Weekly Data -->
@@ -264,9 +285,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Include your custom dashboard JS -->
   <script src="{{ url_for('static', filename='assets/js/pages/dashboard-default.js') }}"></script>
-  <!-- Optional: If using DataTables, include its JS (ensure the corresponding CSS is loaded) -->
+  <!-- DataTables JS (ensure the corresponding CSS is loaded) -->
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
   <script>
-    // Initialize DataTable on the table.
+    // Initialize DataTable with 10 entries per page.
     new DataTable('#example', {
       pageLength: 10
     });
