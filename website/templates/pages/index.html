@@ -62,31 +62,32 @@
 
         <!-- Top Right Box: Demographic Information -->
         <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5>Demographic Information</h5>
-            </div>
-            <div class="card-body">
-              <form action="/assessment" method="get">
-                <div class="mb-3">
-                  <label class="form-label">Age: 30</label>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Gender: Male</label>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Race: White</label>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Ethnicity: Not Hispanic or Latino</label>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Country of Birth: United State</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Update</button>
-              </form>
-            </div>
+<div class="card">
+  <div class="card-header">
+    <h5>Demographic Information</h5>
           </div>
+          <div class="card-body">
+            <form action="{{ url_for('home_blueprint.demographic_assessment') }}" method="get">
+              <div class="mb-3">
+                <label class="form-label">Age: {{ demographics.age }}</label>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Gender: {{ demographics.gender }}</label>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Race: {{ demographics.race }}</label>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Ethnicity: {{ demographics.ethnicity }}</label>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Country of Birth: {{ demographics.country_of_birth }}</label>
+              </div>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+          </div>
+        </div>
+
         </div>
 
       </div>

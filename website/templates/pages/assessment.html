@@ -7,40 +7,28 @@
   <div class="pc-content d-flex justify-content-center align-items-center" style="min-height: 90vh;">
     <div class="card shadow-lg p-4" style="width: 100%; max-width: 600px; border-radius: 20px;">
       <h3 class="text-center mb-4">📋 Demographic Assessment</h3>
-
       <form method="POST">
         {{ form.hidden_tag() }}
-
         <div class="mb-3">
           <label class="form-label">{{ form.age.label }}</label>
           {{ form.age(class="form-control") }}
         </div>
-
         <div class="mb-3">
           <label class="form-label">{{ form.gender.label }}</label>
           {{ form.gender(class="form-control") }}
         </div>
-
         <div class="mb-3">
           <label class="form-label">{{ form.race.label }}</label>
           {{ form.race(class="form-control") }}
         </div>
-
         <div class="mb-3">
           <label class="form-label">{{ form.ethnicity.label }}</label>
           {{ form.ethnicity(class="form-control") }}
         </div>
-
         <div class="mb-3">
           <label class="form-label">{{ form.country_of_birth.label }}</label>
           {{ form.country_of_birth(class="form-control") }}
         </div>
-
-        <div class="mb-4">
-          <label class="form-label">{{ form.vital_status.label }}</label>
-          {{ form.vital_status(class="form-control") }}
-        </div>
-
         <div class="text-center">
           <button type="submit" class="btn btn-lg btn-primary">✅ Submit Assessment</button>
         </div>
