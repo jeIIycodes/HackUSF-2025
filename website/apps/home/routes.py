@@ -2,10 +2,18 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-
+import base64
+import time
+from flask import jsonify
+import base64
+import io
+from flask import request, jsonify
+from PIL import Image
+from flask import Blueprint, request, jsonify
+import base64
+import random
 import os, json, pprint
 import wtforms
-
 from apps.home import blueprint
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required
@@ -30,6 +38,12 @@ def icon_feather():
 def color():
     return render_template('pages/color.html', segment='color')
 
+
+
+@blueprint.route('/picture-taking')
+def take_media():
+    return render_template('pages/picture-taking.html', segment='picture-taking')
+
 @blueprint.route('/sample_page')
 def sample_page():
     return render_template('pages/sample-page.html', segment='sample_page')
@@ -37,6 +51,48 @@ def sample_page():
 @blueprint.route('/typography')
 def typography():
     return render_template('pages/typography.html', segment='typography')
+
+@blueprint.route('/api/detect', methods=['POST'])
+def detect_skin_disease():
+    # this is the place where you capture the image
+    data = request.get_json()
+    if not data or 'image' not in data:
+        return jsonify({'error': 'No image provided'}), 400
+
+    random_boxes = []
+    if random.random() > 0.5:  
+        for _ in range(random.randint(1, 3)):
+            random_boxes.append({
+                "x": random.randint(50, 400),
+                "y": random.randint(50, 300),
+                "width": random.randint(50, 150),
+                "height": random.randint(50, 150),
+                "label": "Possible Ghost exsists"
+            })
+
+    return jsonify({'boxes': random_boxes})
+
+
+
+@blueprint.route('/', defaults={'req_path': ''})
+@blueprint.route('/<path:req_path>')
+def dir_listing(req_path):
+    BASE_DIR = 'Users/suchenfeng/Documents/GitHub/HackUSF-2025/website/apps/'
+
+    # Joining the base and the requested path
+    abs_path = os.path.join(BASE_DIR, req_path)
+
+    # Return 404 if path doesn't exist
+    if not os.path.exists(abs_path):
+        return abort(404)
+
+    # Check if path is a file and serve
+    if os.path.isfile(abs_path):
+        return send_file(abs_path)
+
+    # Show directory contents
+    files = os.listdir(abs_path)
+    return render_template('files.html', files=files)
 
 def getField(column): 
     if isinstance(column.type, db.Text):
@@ -116,6 +172,24 @@ def get_segment(request):
 
     except:
         return None
+
+@blueprint.route('/dashboard')
+def dashboard():
+    return render_template('pages/dashboard.html')
+@blueprint.route('main')
+def main():
+    return render_template('pages/main.html')
+
+@blueprint.route('/analyze/<image_id>')
+def analyze(image_id):
+    # 这里会调用模型处理图像
+    return render_template('pages/analyze.html', image_id=image_id)
+
+@blueprint.route('/result/<image_id>')
+def result(image_id):
+    # 渲染模型结果和建议
+    return render_template('pages/result.html', image_id=image_id)
+
 
 @blueprint.route('/error-403')
 def error_403():
