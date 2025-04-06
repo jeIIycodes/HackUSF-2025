@@ -28,5 +28,5 @@ for table in tables:
     )
     query_df.to_csv(f"./download/{table}.csv", index=False)
 
-gdc_cohort.download(threads=64, exclude=["Slide Image"])
+gdc_cohort.download(threads=64)
 

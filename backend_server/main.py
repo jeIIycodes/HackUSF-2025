@@ -7,16 +7,17 @@ from flask import Flask, request, jsonify
 from skimage.color import rgb2lab
 from skimage.util import img_as_float
 from scipy.stats import skew, kurtosis
-import xgboost
+import xgboost as xgb
 from flask_cors import CORS
-
-
 
 app = Flask(__name__)
 CORS(app)
+
 # Load the final model and scaler at startup
 try:
-    model = joblib.load('final_skin_cancer_model.pkl')
+    # Initialize an XGBClassifier and load the JSON model
+    model = xgb.XGBClassifier()
+    model.load_model('final_skin_cancer_model.json')
     scaler = joblib.load('final_scaler.pkl')
 except Exception as e:
     print("Error loading model or scaler:", e)
@@ -93,11 +94,21 @@ def analyze():
 
         # Get prediction probabilities from the model
         probabilities = model.predict_proba(features_scaled)
+
+        # Reduce class 2's probability to 60% of its value
+        probabilities[0][2] *= 0.6
+
+        # Renormalize so probabilities still sum to 1
+        probabilities[0] /= np.sum(probabilities[0])
+
+        # Get predicted class and its probability
         pred_class = np.argmax(probabilities, axis=1)[0]
         pred_prob = probabilities[0][pred_class]
 
-        # Map the predicted index to a class label
-        label = "Benign" if pred_class == 0 else "Malignant"
+        # Map predicted index to class label for three options
+        class_mapping = {0: "Benign", 1: "Malignant", 2: "Neither"}
+        label = class_mapping.get(pred_class, "Unknown")
+
         print({
             "classification": label,
             "probability": float(pred_prob)
