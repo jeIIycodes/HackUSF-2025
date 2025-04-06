@@ -14,29 +14,37 @@
         </li>
 
         <li class="pc-item">
-          <a href="{{ url_for('home_blueprint.index') }}" class="pc-link">
+          <a href="{{ url_for('home_blueprint.dashboard') }}" class="pc-link">
             <span class="pc-micon"><i data-feather="home"></i></span>
+            <span class="pc-mtext">Home</span>
+          </a>
+        </li>
+
+
+        <li class="pc-item">
+          <a href="{{ url_for('home_blueprint.index') }}" class="pc-link">
+            <span class="pc-micon"><i data-feather="bar-chart"></i></span>
             <span class="pc-mtext">Dashboard</span>
           </a>
         </li>
 
         <li class="pc-item">
           <a href="{{ url_for('home_blueprint.demographic_assessment') }}" class="pc-link">
-            <span class="pc-micon"><i data-feather="check-circle"></i></span>
+            <span class="pc-micon"><i data-feather="file-text"></i></span>
             <span class="pc-mtext">Assessment</span>
           </a>
         </li>
 
         <li class="pc-item">
           <a href="{{ url_for('home_blueprint.main') }}" class="pc-link">
-            <span class="pc-micon"><i data-feather="bar-chart"></i></span>
+            <span class="pc-micon"><i data-feather="check-circle"></i></span>
             <span class="pc-mtext">Skin Facts</span>
           </a>
         </li>
 
         <li class="pc-item">
           <a href="{{ url_for('home_blueprint.take_media') }}" class="pc-link">
-            <span class="pc-micon"><i data-feather="bar-chart"></i></span>
+            <span class="pc-micon"><i data-feather="camera"></i></span>
             <span class="pc-mtext">Cancer Detector</span>
           </a>
         </li>
@@ -45,9 +53,13 @@
 
       <div class="card pc-user-card my-3 bg-white bg-opacity-10">
         <div class="card-body text-center">
-          <a href="https://app-generator.dev/product/datta-able/flask/" class="btn btn-success">
-            <span class="pc-micon"><i data-feather="download"></i></span>
-            Download
+          <a href="{{ url_for('static', filename='assets/table.csv') }}" 
+   class="btn btn-success" 
+   download> 
+  <span class="pc-micon"><i data-feather="download"></i></span>
+  Download Data CSV
+</a>
+
           </a>
         </div>
       </div>
