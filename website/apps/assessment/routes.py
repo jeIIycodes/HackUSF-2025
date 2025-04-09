@@ -9,4 +9,4 @@ def demographic_assessment():
     if form.validate_on_submit():
         session['has_taken_assessment'] = True
         return redirect(url_for('home_blueprint.index'))
-    return render_template('/pages/assessment.html', form=form)
+    return render_template('pages/assessment.html', form=form)
